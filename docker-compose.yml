@@ -2,8 +2,7 @@ services:
   ecommerce-store:
     build: .
     container_name: aiops-tech-store
-    ports:
-      - "80:80"
+
     restart: always
 
   payment-gateway:
