@@ -2,7 +2,6 @@ services:
   ecommerce-store:
     build: .
     container_name: aiops-tech-store
-
     restart: always
 
   payment-gateway:
@@ -37,6 +36,7 @@ services:
     ports:
       - "3000:3000"
     restart: always
+
   nginx:
     image: nginx:latest
     container_name: aiops-nginx
