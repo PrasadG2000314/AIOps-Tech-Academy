@@ -44,4 +44,7 @@ services:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - ecommerce-store
+      - payment-gateway
     restart: always
