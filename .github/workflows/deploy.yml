@@ -1,0 +1,32 @@
+name: Deploy AIOps Stack to AWS
+
+on:
+  push:
+    branches: [ main ]  # main branch එකට කෝඩ් එක push කළ ගමන් මේක වැඩ කරන්න පටන් ගනියි
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up SSH Key
+      uses: webfactory/ssh-agent@v8
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Copy files to AWS Server via SCP
+      run: |
+        scp -o StrictHostKeyChecking=no -r . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/ecommerce_app/
+
+    - name: Build and Restart Docker Containers on AWS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd ~/ecommerce_app
+          sudo docker compose up -d --build
